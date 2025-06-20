@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 7: Differential Equations</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #fefbf7;
+    padding: 20px;
+    color: #222;
+  }
+  h1, h2 {
+    color: #34495e;
+  }
+  nav a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 7px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #1c5980;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 90px;
+    margin-top: 5px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #eaf3ff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 7: Differential Equations</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Solving first-order differential equations (separable, linear).</li>
+    <li>Modeling with differential equations (growth, decay, mixing problems).</li>
+    <li>Solving second-order differential equations.</li>
+    <li>Applications: Newton's law of cooling, logistic growth, population models.</li>
+    <li>Slope fields and qualitative analysis.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+const quizData = [
+  {question:"What type of differential equation is dy/dx = ky?", options:["Separable","Linear","Exact","Nonlinear"], answer:0},
+  {question:"The general solution of dy/dx = ky is:", options:["y = Ce^{kx}","y = kx + C","y = k/x + C","y = Cx^k"], answer:0},
+  {question:"Which method solves differential equations by separating variables?", options:["Separable method","Integrating factor","Substitution","Partial fractions"], answer:0},
+  {question:"An integrating factor is used to solve:", options:["Linear first-order ODEs","Separable equations","Exact equations","Second-order equations"], answer:0},
+  {question:"Newton's law of cooling models temperature change proportional to:", options:["Difference from ambient temperature","Time","Square of temperature","Logarithm of temperature"], answer:0},
+  {question:"A logistic growth model is characterized by:", options:["Population growth with carrying capacity","Unbounded exponential growth","Oscillatory behavior","Decay to zero"], answer:0},
+  {question:"The slope field of dy/dx = x + y shows:", options:["Slope at each point (x,y)","Position of solutions","Velocity","Acceleration"], answer:0},
+  {question:"A particular solution satisfies:", options:["The differential equation and initial conditions","Only the differential equation","Only initial conditions","Neither"], answer:0},
+  {question:"The solution to dy/dx = 3x² is:", options:["y = x^3 + C","y = 3x + C","y = 6x + C","y = 3x^2 + C"], answer:0},
+  {question:"Which technique can solve dy/dx + P(x)y = Q(x)?", options:["Integrating factor","Separation of variables","Substitution","Partial fractions"], answer:0},
+  {question:"The constant C in the general solution represents:", options:["Arbitrary constant determined by initial conditions","Slope","Initial x-value","Solution type"], answer:0},
+  {question:"For dy/dx = y(1 - y), the equilibrium solutions are:", options:["y=0 and y=1","y=1 only","y=0 only","No equilibrium"], answer:0},
+  {question:"Second order differential equations involve:", options:["Second derivatives","Only first derivatives","No derivatives","Third derivatives"], answer:0},
+  {question:"The homogeneous differential equation has the form:", options:["dy/dx + P(x)y = 0","dy/dx = Q(x)","dy/dx + P(x)y = Q(x)","None of these"], answer:0},
+  {question:"If dy/dx = f(x)g(y), the equation is:", options:["Separable","Linear","Exact","Nonlinear"], answer:0},
+  {question:"In mixing problems, concentration changes over time and:", options:["Can be modeled by ODEs","Are constant","Are random","Cannot be modeled"], answer:0},
+  {question:"The logistic growth function approaches:", options:["A carrying capacity","Infinity","Zero","Negative values"], answer:0},
+  {question:"Initial value problems provide:", options:["A unique solution","Multiple solutions","No solution","Infinite solutions"], answer:0},
+  {question:"Slope fields help to:", options:["Visualize solutions without solving","Calculate derivatives","Integrate functions","Find maxima"], answer:0},
+  {question:"The particular solution of dy/dx = 2x with y(0)=3 is:", options:["y = x^2 + 3","y = 2x + 3","y = x^2 - 3","y = 2x - 3"], answer:0},
+  {question:"The term 'separable' means:", options:["The variables can be separated on different sides of the equation","The solution separates into parts","The equation is linear","The equation is second order"], answer:0},
+  {question:"The solution of dy/dx = 0 is:", options:["y = C","y = x","y = 0","No solution"], answer:0},
+  {question:"The integrating factor μ(x) for dy/dx + P(x)y = Q(x) is:", options:["e^{∫P(x) dx}","∫P(x) dx","P(x)","Q(x)"], answer:0},
+  {question:"In Newton’s law of cooling, the temperature approaches:", options:["Ambient temperature","Zero","Infinity","Initial temperature"], answer:0},
+  {question:"The characteristic equation arises in:", options:["Second-order linear differential equations","First-order equations","Nonlinear equations","Partial differential equations"], answer:0},
+  {question:"The solution of the homogeneous equation is:", options:["The complementary function","The particular solution","The initial value","The slope field"], answer:0},
+  {question:"The general solution equals:", options:["Complementary function + Particular solution","Only particular solution","Only complementary function","Zero"], answer:0},
+  {question:"If y' = 3y, the solution grows:", options:["Exponentially","Linearly","Quadratically","Not at all"], answer:0},
+  {question:"The population growth rate in logistic model decreases when:", options:["Population nears carrying capacity","Population is small","Population is zero","Population is negative"], answer:0},
+  {question:"Separable equations can be written as:", options:["g(y) dy = f(x) dx","y dx = x dy","y + x = 0","dy/dx = y + x"], answer:0},
+  {question:"The solution curve passing through (x_0,y_0) is called:", options:["Particular solution","General solution","Slope field","Equilibrium solution"], answer:0},
+  {question:"Euler’s method is used to:", options:["Approximate solutions numerically","Solve exact equations","Find slope fields","Separate variables"], answer:0},
+  {question:"If dy/dx = 0 at y = k, k is a:", options:["Equilibrium solution","Particular solution","General solution","Slope"], answer:0},
+  {question:"The term 'linear' means:", options:["y and its derivatives appear to the first power","Equation can be separated","Solution is linear function","No derivatives"], answer:0},
+  {question:"Mixing problems involve:", options:["Change in concentration over time","Constant volume","No flow","No change in concentration"], answer:0},
+  {question:"To solve dy/dx = x + y, you can use:", options:["Integrating factor","Separation of variables","Substitution","Partial fractions"], answer:0},
+  {question:"Population models using differential equations help to:", options:["Predict population over time","Calculate slopes","Find integrals","Solve algebraic equations"], answer:0},
+  {question:"The slope at a point (x,y) in slope field is:", options:["Value of dy/dx at (x,y)","Value of y","Value of x","Value of integral"], answer:0},
+  {question:"The logistic differential equation is:", options:["dy/dt = ky(1 - y/M)","dy/dt = ky","dy/dt = -ky","dy/dt = 0"], answer:0}
+];
+
+const shortAnswerData = [
+  {
+    question: "Explain the difference between general and particular solutions of a differential equation.",
+    sampleAnswer: "The general solution contains arbitrary constants representing all possible solutions. A particular solution is found by applying initial conditions to determine those constants."
+  },
+  {
+    question: "Describe how to solve a separable differential equation.",
+    sampleAnswer: "Rewrite the equation to isolate variables on different sides, then integrate both sides separately."
+  },
+  {
+    question: "What is an integrating factor and when is it used?",
+    sampleAnswer: "An integrating factor is a function used to multiply a linear first-order ODE to make it exact and solvable by direct integration."
+  },
+  {
+    question: "How does Newton’s law of cooling model temperature change?",
+    sampleAnswer: "It states that the rate of change of temperature is proportional to the difference between the object’s temperature and ambient temperature."
+  },
+  {
+    question: "Explain the concept of equilibrium solutions in differential equations.",
+    sampleAnswer: "Equilibrium solutions are constant solutions where the derivative is zero, representing steady states."
+  }
+];
+
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+
+let timerInterval;
+let secondsElapsed = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  secondsElapsed = 0;
+  timerSpan.textContent = '00:00';
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    timerSpan.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function loadQuiz() {
+  let html = '';
+  quizData.forEach((q, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${q.question}</p>`;
+    q.options.forEach((opt, i) => {
+      html += `<label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>`;
+    });
+    html += `</div>`;
+  });
+  quizForm.innerHTML = html;
+}
+
+startQuizBtn.onclick = () => {
+  loadQuiz();
+  startQuizBtn.style.display = 'none';
+  submitQuizBtn.style.display = 'inline-block';
+  startTimer();
+};
+
+submitQuizBtn.onclick = () => {
+  stopTimer();
+  let score = 0;
+  quizData.forEach((q, idx) => {
+    const val = quizForm['q' + idx]?.value;
+    if (parseInt(val) === q.answer) score++;
+  });
+  alert(`You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.`);
+
+  let stats = JSON.parse(localStorage.getItem('unit7_stats') || '{"attempts":0,"totalScore":0}');
+  stats.attempts++;
+  stats.totalScore += score;
+  localStorage.setItem('unit7_stats', JSON.stringify(stats));
+  updateStats();
+
+  submitQuizBtn.style.display = 'none';
+  startQuizBtn.style.display = 'inline-block';
+  quizForm.innerHTML = '';
+  timerSpan.textContent = '00:00';
+};
+
+function updateStats() {
+  let stats = JSON.parse(localStorage.getItem('unit7_stats'));
+  if (!stats) {
+    statsContent.textContent = "You haven't taken any quizzes yet.";
+    return;
+  }
+  let avg = (stats.totalScore / stats.attempts).toFixed(2);
+  statsContent.innerHTML = `<p>Total Attempts: ${stats.attempts}</p>
+    <p>Average Score: ${avg} / ${quizData.length}</p>`;
+}
+updateStats();
+
+function loadShortAnswers() {
+  let html = '';
+  shortAnswerData.forEach((item, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${item.question}</p>
+      <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea>
+      <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div>
+    </div>`;
+  });
+  shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+
+submitShortAnswerBtn.onclick = () => {
+  shortAnswerData.forEach((item, idx) => {
+    document.getElementById('sample' + idx).style.display = 'block';
+  });
+  shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+
+</body>
+</html>
