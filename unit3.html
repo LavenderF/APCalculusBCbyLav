@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 3: Composite, Implicit, and Inverse Functions</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #f9fbfd;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2 {
+    color: #1a73e8;
+  }
+  nav a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0b52d0;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    margin-top: 5px;
+    padding: 6px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 3: Differentiation: Composite, Implicit, and Inverse Functions</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Using the chain rule to differentiate composite functions.</li>
+    <li>Implicit differentiation and finding derivatives of implicitly defined functions.</li>
+    <li>Derivatives of inverse functions and the inverse function theorem.</li>
+    <li>Applications of the chain rule and implicit differentiation in real-world problems.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+// Quiz questions and answers for Unit 3
+const quizData = [
+  {question:"What is the derivative of the composite function f(g(x))?", options:["f'(g(x)) * g'(x)","f'(x) * g(x)","f(x) * g'(x)","g'(x) * f(x)"], answer:0},
+  {question:"The chain rule is used when differentiating:", options:["Composite functions","Polynomials","Rational functions","Exponential functions"], answer:0},
+  {question:"What is the derivative of sin(2x)?", options:["2cos(2x)","cos(2x)","2sin(2x)","cos(x)"], answer:0},
+  {question:"The derivative of x^2 * ln(x) is:", options:["2xln(x) + x","x²/x","2x/x","x² + ln(x)"], answer:0},
+  {question:"The derivative of y = x³ + x² + 1 with respect to x using implicit differentiation is:", options:["3x² + 2x","3x + 2","3x³ + 2x²","x² + 1"], answer:0},
+  {question:"If y = sin(x), what is dy/dx?", options:["cos(x)","sin(x)","-cos(x)","-sin(x)"], answer:0},
+  {question:"The derivative of the inverse function f⁻¹(x) is:", options:["1/f'(f⁻¹(x))","f'(f⁻¹(x))","f'(x)","1/f'(x)"], answer:0},
+  {question:"The inverse function of y = x² is:", options:["y = √x","y = x","y = -x","y = 1/x"], answer:0},
+  {question:"Which rule is used to differentiate functions like y = e^(x²)?", options:["Chain rule","Product rule","Quotient rule","Power rule"], answer:0},
+  {question:"If y = ln(x), then dy/dx is:", options:["1/x","x","ln(x)","e^x"], answer:0},
+  {question:"The derivative of arctan(x) is:", options:["1/(1+x²)","x²/(1+x²)","1/(x²+1)","1/(x+1)"], answer:0},
+  {question:"The derivative of x³ * e^x is:", options:["3x² * e^x + x³ * e^x","3x² * e^x","x³ * e^x","3x² * e^(x+1)"], answer:0},
+  {question:"If y = cos(x), then dy/dx is:", options:["-sin(x)","cos(x)","sin(x)","-cos(x)"], answer:0},
+  {question:"Implicit differentiation allows us to differentiate functions that are:", options:["Not solvable explicitly for y","Solvable for y","Polynomials only","Rational functions only"], answer:0},
+  {question:"What is the derivative of tan(x) using the chain rule?", options:["sec²(x)","sec²(2x)","cos²(x)","sec(x)"], answer:0},
+  {question:"If y = e^(x²), what is dy/dx?", options:["2xe^(x²)","x²e^(x)","2xe^(x)","e^(x²)"], answer:0},
+  {question:"The derivative of f(x) = x^2 * cos(x) is:", options:["2xcos(x) - x²sin(x)","2xcos(x) + x²sin(x)","x²cos(x)","2xsin(x)"], answer:0},
+  {question:"What is the derivative of the function y = x * ln(x)?", options:["ln(x) + 1","ln(x)","x * ln(x)","1/x + ln(x)"], answer:0},
+  {question:"The inverse function of f(x) = x^2 is:", options:["f⁻¹(x) = √x","f⁻¹(x) = x","f⁻¹(x) = -x","f⁻¹(x) = 1/x"], answer:0},
+  {question:"What is the derivative of x^2 using implicit differentiation?", options:["2x","x²","2x²","x"], answer:0},
+  {question:"What is the derivative of sin(x) * cos(x)?", options:["cos²(x) - sin²(x)","sin²(x) + cos²(x)","2sin(x)cos(x)","sin(2x)"], answer:0},
+  {question:"The chain rule is necessary when the derivative involves:", options:["A composition of functions","A product of functions","A quotient of functions","An exponential function"], answer:0},
+  {question:"If y = cos(x²), then dy/dx is:", options:["-2xsin(x²)","2xsin(x)","cos(2x)","-sin(x²)"], answer:0},
+  {question:"What is the derivative of ln(2x)?", options:["1/x","2/x","1/2x","ln(2x)"], answer:0},
+  {question:"The derivative of (sin(x))² is:", options:["2sin(x)cos(x)","2cos(x)sin(x)","2sin(x)","cos(2x)"], answer:0},
+  {question:"The derivative of arccos(x) is:", options:["-1/√(1-x²)","1/√(1-x²)","1/(x²-1)","1/(x+1)"], answer:0},
+  {question:"What is the derivative of x⁴ using implicit differentiation?", options:["4x³","x³","4x","x⁴"], answer:0},
+  {question:"What is the derivative of √(x)?", options:["1/(2√x)","1/x²","x","1/2x"], answer:0},
+  {question:"The derivative of ln(x²) is:", options:["2/x","x²","1/x","2x"], answer:0},
+  {question:"What is the derivative of tan(2x)?", options:["2sec²(2x)","sec²(x)","2sec²(x)","sec²(2x)"], answer:0},
+  {question:"If y = ln(x² + 1), then dy/dx is:", options:["2x/(x² + 1)","2x","ln(x² + 1)","1/(x² + 1)"], answer:0},
+  {question:"The derivative of the product of x² and ln(x) is:", options:["2xln(x) + x","2x/x","ln(x)","x²"], answer:0}
+];
+
+// Short answer questions for Unit 3
+const shortAnswerData = [
+  {
+    question: "Define the chain rule and explain its purpose in differentiation.",
+    sampleAnswer: "The chain rule is used to differentiate composite functions. If y = f(g(x)), then the derivative is dy/dx = f'(g(x)) * g'(x)."
+  },
+  {
+    question: "Explain implicit differentiation with an example.",
+    sampleAnswer: "Implicit differentiation is used when a function is not explicitly solvable for y. For example, if x² + y² = 1, differentiate both sides: 2x + 2y(dy/dx) = 0, solving for dy/dx gives dy/dx = -x/y."
+  },
+  {
+    question: "What is the inverse function theorem?",
+    sampleAnswer: "The inverse function theorem states that if f and its inverse f⁻¹ are differentiable, then the derivative of the inverse function is given by: (f⁻¹)'(x) = 1 / f'(f⁻¹(x))."
+  },
+  {
+    question: "Differentiate the function y = sin(x²) using the chain rule.",
+    sampleAnswer: "Using the chain rule: dy/dx = cos(x²) * 2x."
+  },
+  {
+    question: "What is the derivative of the inverse trigonometric function arctan(x)?",
+    sampleAnswer: "The derivative of arctan(x) is 1 / (1 + x²)."
+  }
+];
+
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+
+let timerInterval;
+let secondsElapsed = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  secondsElapsed = 0;
+  timerSpan.textContent = '00:00';
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    timerSpan.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function loadQuiz() {
+  let html = '';
+  quizData.forEach((q, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${q.question}</p>`;
+    q.options.forEach((opt, i) => {
+      html += `<label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>`;
+    });
+    html += `</div>`;
+  });
+  quizForm.innerHTML = html;
+}
+
+startQuizBtn.onclick = () => {
+  loadQuiz();
+  startQuizBtn.style.display = 'none';
+  submitQuizBtn.style.display = 'inline-block';
+  startTimer();
+};
+
+submitQuizBtn.onclick = () => {
+  stopTimer();
+  let score = 0;
+  quizData.forEach((q, idx) => {
+    const val = quizForm['q' + idx].value;
+    if (parseInt(val) === q.answer) score++;
+  });
+  alert(`You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.`);
+
+  // Save stats in localStorage
+  let stats = JSON.parse(localStorage.getItem('unit3_stats') || '{"attempts":0,"totalScore":0}');
+  stats.attempts++;
+  stats.totalScore += score;
+  localStorage.setItem('unit3_stats', JSON.stringify(stats));
+  updateStats();
+
+  submitQuizBtn.style.display = 'none';
+  startQuizBtn.style.display = 'inline-block';
+  quizForm.innerHTML = '';
+  timerSpan.textContent = '00:00';
+};
+
+function updateStats() {
+  let stats = JSON.parse(localStorage.getItem('unit3_stats'));
+  if (!stats) {
+    statsContent.textContent = "You haven't taken any quizzes yet.";
+    return;
+  }
+  let avg = (stats.totalScore / stats.attempts).toFixed(2);
+  statsContent.innerHTML = `<p>Total Attempts: ${stats.attempts}</p>
+    <p>Average Score: ${avg} / ${quizData.length}</p>`;
+}
+updateStats();
+
+function loadShortAnswers() {
+  let html = '';
+  shortAnswerData.forEach((item, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${item.question}</p>
+      <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea>
+      <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div>
+    </div>`;
+  });
+  shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+
+submitShortAnswerBtn.onclick = () => {
+  shortAnswerData.forEach((item, idx) => {
+    document.getElementById('sample' + idx).style.display = 'block';
+  });
+  shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+
+</body>
+</html>
