@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 5: Parametric, Polar, and Vector Functions</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #f9fbfd;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2 {
+    color: #1a73e8;
+  }
+  nav a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0b52d0;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    margin-top: 5px;
+    padding: 6px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 5: Parametric, Polar, and Vector Functions</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Parametric equations and calculus: derivatives, tangent lines, and arc length.</li>
+    <li>Polar coordinates and graphs: conversion, area, and length.</li>
+    <li>Vector-valued functions: motion in the plane and space, velocity, and acceleration.</li>
+    <li>Applications involving parametric and polar forms.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+const quizData = [
+  {question:"Which of the following is the parametric form of a circle of radius r centered at the origin?", options:["x = r cos t, y = r sin t","x = r sin t, y = r cos t","x = rt, y = rt","x = r, y = t"], answer:0},
+  {question:"The derivative dy/dx for parametric equations x(t) and y(t) is:", options:["(dy/dt) / (dx/dt)","(dx/dt) / (dy/dt)","dy/dt + dx/dt","dx/dt - dy/dt"], answer:0},
+  {question:"The formula for arc length of parametric curve from t=a to t=b is:", options:["∫_a^b √((dx/dt)^2 + (dy/dt)^2) dt","∫_a^b (dx/dt + dy/dt) dt","∫_a^b (dx/dt)(dy/dt) dt","∫_a^b √(x^2 + y^2) dt"], answer:0},
+  {question:"Polar coordinates (r, θ) relate to Cartesian by:", options:["x = r cos θ, y = r sin θ","x = r sin θ, y = r cos θ","x = θ cos r, y = θ sin r","x = r + θ, y = r - θ"], answer:0},
+  {question:"Area enclosed by polar curve r = f(θ) from α to β is:", options:["(1/2) ∫_α^β [f(θ)]² dθ","∫_α^β f(θ) dθ","∫_α^β r dθ","(1/2) ∫_α^β f(θ) dθ"], answer:0},
+  {question:"The vector-valued function r(t) = ⟨x(t), y(t), z(t)⟩ represents:", options:["Position in 3D space","Velocity vector","Acceleration vector","Force vector"], answer:0},
+  {question:"The velocity vector v(t) is:", options:["r'(t)","r(t)","∫ r(t) dt","r''(t)"], answer:0},
+  {question:"Acceleration vector a(t) is:", options:["v'(t)","r(t)","∫ v(t) dt","r''(t)"], answer:0},
+  {question:"Conversion from Cartesian to polar involves:", options:["r = √(x² + y²), θ = arctan(y/x)","r = x + y, θ = x - y","r = x² + y², θ = xy","r = x/y, θ = x + y"], answer:0},
+  {question:"For parametric equations, to find the second derivative d²y/dx²:", options:["d/dt(dy/dx) / (dx/dt)","(d²y/dt²)/(d²x/dt²)","d/dx(dy/dx)","d/dt(dy/dt)"], answer:0},
+  {question:"The slope of the tangent line to a parametric curve is undefined when:", options:["dx/dt = 0 and dy/dt ≠ 0","dy/dt = 0 and dx/dt ≠ 0","dx/dt = dy/dt","Both derivatives are zero"], answer:0},
+  {question:"Polar graph of r = 1 + cos θ is a:", options:["Cardioid","Circle","Lemniscate","Rose curve"], answer:0},
+  {question:"The length of a curve given in polar form r = f(θ) from α to β is:", options:["∫_α^β √(r² + (dr/dθ)²) dθ","∫_α^β r dθ","∫_α^β (dr/dθ) dθ","∫_α^β r² dθ"], answer:0},
+  {question:"A vector function r(t) represents motion in:", options:["Space","Only x-axis","Only y-axis","Only z-axis"], answer:0},
+  {question:"If r(t) = ⟨cos t, sin t, t⟩, then the path is a:", options:["Helix","Circle","Line","Parabola"], answer:0},
+  {question:"Which of the following is NOT a vector?", options:["Scalar quantity","Velocity","Force","Displacement"], answer:0},
+  {question:"The dot product of two vectors gives:", options:["A scalar","A vector","An angle","A matrix"], answer:0},
+  {question:"The cross product of vectors in R³ results in:", options:["A vector","A scalar","A number","A point"], answer:0},
+  {question:"The unit tangent vector T(t) is:", options:["r'(t) normalized","r(t) normalized","r''(t) normalized","Zero vector"], answer:0},
+  {question:"Polar equation r = a cos(nθ) describes a:", options:["Rose curve","Circle","Ellipse","Parabola"], answer:0},
+  {question:"The angle θ in polar coordinates is measured from:", options:["Positive x-axis","Positive y-axis","Origin","Negative x-axis"], answer:0},
+  {question:"Which formula converts polar coordinates to Cartesian?", options:["x = r cos θ, y = r sin θ","x = r sin θ, y = r cos θ","x = θ cos r, y = θ sin r","x = r + θ, y = r - θ"], answer:0},
+  {question:"Velocity vector is the derivative of:", options:["Position vector","Acceleration vector","Force vector","Displacement vector"], answer:0},
+  {question:"The acceleration vector is:", options:["Second derivative of position vector","Integral of velocity","Position vector","Zero vector"], answer:0},
+  {question:"When the magnitude of velocity vector is constant, the motion is:", options:["Uniform speed","Constant acceleration","At rest","Changing direction"], answer:0},
+  {question:"The radius of curvature at t is related to:", options:["Rate of change of the unit tangent vector","Position vector","Velocity magnitude","Acceleration direction"], answer:0},
+  {question:"The parametric equations x = t², y = t³ describe a:", options:["Curve in xy-plane","Circle","Straight line","Ellipse"], answer:0},
+  {question:"The parameter t usually represents:", options:["Time","Distance","Angle","Temperature"], answer:0},
+  {question:"In parametric equations, if dx/dt = 0 and dy/dt ≠ 0, the tangent is:", options:["Vertical","Horizontal","Undefined","Zero"], answer:0},
+  {question:"The length of a parametric curve is calculated by:", options:["∫ √((dx/dt)² + (dy/dt)²) dt","∫ (dx/dt + dy/dt) dt","∫ (dx/dt)(dy/dt) dt","∫ √(x² + y²) dt"], answer:0},
+  {question:"A rose curve with r = cos 3θ has how many petals?", options:["3","6","2","1"], answer:0},
+  {question:"In vector functions, r'(t) × r''(t) is related to:", options:["Curvature and torsion","Position","Velocity","Acceleration"], answer:0},
+  {question:"Which of the following is true about vector functions?", options:["They describe motion in space","They only describe motion in plane","They cannot represent acceleration","They represent scalar quantities"], answer:0},
+  {question:"For polar curve r = 2 sin θ, the curve is a:", options:["Circle","Ellipse","Line","Parabola"], answer:0},
+  {question:"If θ increases by 2π, polar coordinates describe:", options:["One full revolution","Half revolution","No movement","Double revolution"], answer:0},
+  {question:"In parametric form, the derivative d²y/dx² is:", options:["(d/dt(dy/dx)) / (dx/dt)","(d²y/dt²)/(d²x/dt²)","d/dx(dy/dx)","d/dt(dy/dt)"], answer:0},
+  {question:"The integral ∫_a^b r(t) dt for vector functions gives:", options:["Displacement vector","Velocity vector","Acceleration vector","Force vector"], answer:0},
+  {question:"The length of a vector function r(t) from a to b is:", options:["∫_a^b |r'(t)| dt","∫_a^b r(t) dt","∫_a^b r''(t) dt","∫_a^b |r(t)| dt"], answer:0}
+];
+
+const shortAnswerData = [
+  {
+    question: "Explain how to find dy/dx for parametric equations x(t) and y(t).",
+    sampleAnswer: "Calculate dy/dt and dx/dt, then divide: dy/dx = (dy/dt) / (dx/dt)."
+  },
+  {
+    question: "Describe the formula for the area enclosed by a polar curve r = f(θ).",
+    sampleAnswer: "Area = (1/2) ∫ from α to β of [f(θ)]² dθ."
+  },
+  {
+    question: "What is the physical meaning of the vector-valued function r(t) in calculus?",
+    sampleAnswer: "r(t) represents the position of a particle in space at time t."
+  },
+  {
+    question: "How do you compute the arc length of a parametric curve?",
+    sampleAnswer: "Use the integral ∫_a^b √((dx/dt)² + (dy/dt)²) dt from t=a to t=b."
+  },
+  {
+    question: "Explain the relationship between velocity and acceleration vectors for r(t).",
+    sampleAnswer: "Velocity is the first derivative r'(t), acceleration is the second derivative r''(t) of the position vector."
+  }
+];
+
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+
+let timerInterval;
+let secondsElapsed = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  secondsElapsed = 0;
+  timerSpan.textContent = '00:00';
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    timerSpan.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function loadQuiz() {
+  let html = '';
+  quizData.forEach((q, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${q.question}</p>`;
+    q.options.forEach((opt, i) => {
+      html += `<label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>`;
+    });
+    html += `</div>`;
+  });
+  quizForm.innerHTML = html;
+}
+
+startQuizBtn.onclick = () => {
+  loadQuiz();
+  startQuizBtn.style.display = 'none';
+  submitQuizBtn.style.display = 'inline-block';
+  startTimer();
+};
+
+submitQuizBtn.onclick = () => {
+  stopTimer();
+  let score = 0;
+  quizData.forEach((q, idx) => {
+    const val = quizForm['q' + idx].value;
+    if (parseInt(val) === q.answer) score++;
+  });
+  alert(`You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.`);
+
+  let stats = JSON.parse(localStorage.getItem('unit5_stats') || '{"attempts":0,"totalScore":0}');
+  stats.attempts++;
+  stats.totalScore += score;
+  localStorage.setItem('unit5_stats', JSON.stringify(stats));
+  updateStats();
+
+  submitQuizBtn.style.display = 'none';
+  startQuizBtn.style.display = 'inline-block';
+  quizForm.innerHTML = '';
+  timerSpan.textContent = '00:00';
+};
+
+function updateStats() {
+  let stats = JSON.parse(localStorage.getItem('unit5_stats'));
+  if (!stats) {
+    statsContent.textContent = "You haven't taken any quizzes yet.";
+    return;
+  }
+  let avg = (stats.totalScore / stats.attempts).toFixed(2);
+  statsContent.innerHTML = `<p>Total Attempts: ${stats.attempts}</p>
+    <p>Average Score: ${avg} / ${quizData.length}</p>`;
+}
+updateStats();
+
+function loadShortAnswers() {
+  let html = '';
+  shortAnswerData.forEach((item, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx + 1}.</strong> ${item.question}</p>
+      <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea>
+      <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div>
+    </div>`;
+  });
+  shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+
+submitShortAnswerBtn.onclick = () => {
+  shortAnswerData.forEach((item, idx) => {
+    document.getElementById('sample' + idx).style.display = 'block';
+  });
+  shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+
+</body>
+</html>
