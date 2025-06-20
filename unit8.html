@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 8: Infinite Sequences and Series</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #fafaf7;
+    padding: 20px;
+    color: #222;
+  }
+  h1, h2 {
+    color: #2c3e50;
+  }
+  nav a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 7px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #1c5980;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 90px;
+    margin-top: 5px;
+    padding: 8px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #eaf0f8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 8: Infinite Sequences and Series</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Convergence and divergence of sequences and series.</li>
+    <li>Tests for convergence: nth-term test, integral test, comparison test, ratio test, root test.</li>
+    <li>Power series and radius of convergence.</li>
+    <li>Taylor and Maclaurin series expansions.</li>
+    <li>Alternating series and conditional convergence.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+const quizData = [
+  {question:"What does it mean for a sequence to converge?", options:["Its terms approach a finite limit","Its terms become infinite","Its terms oscillate","Its terms increase without bound"], answer:0},
+  {question:"Which test can quickly show divergence if the limit of the terms isn't zero?", options:["Nth-term test","Ratio test","Integral test","Comparison test"], answer:0},
+  {question:"The sum of a geometric series with |r|<1 converges to:", options:["a/(1-r)","a*r","a*r/(1-r)","a*(1-r)"], answer:0},
+  {question:"The radius of convergence refers to:", options:["Distance within which a power series converges","Sum of all terms","Limit of the sequence","Domain of definition"], answer:0},
+  {question:"The integral test is used to determine:", options:["Convergence of positive, decreasing sequences","Sum of series","Radius of convergence","Taylor series"], answer:0},
+  {question:"The ratio test uses the limit of:", options:["|a_(n+1)/a_n|","a_n","Sum of terms","Integral"], answer:0},
+  {question:"A series that converges but not absolutely is called:", options:["Conditionally convergent","Absolutely convergent","Divergent","Oscillating"], answer:0},
+  {question:"The Maclaurin series is a Taylor series centered at:", options:["0","1","-1","Any number"], answer:0},
+  {question:"An alternating series test checks for:", options:["Terms decreasing to zero","Terms increasing","Non-zero limit","Positive terms"], answer:0},
+  {question:"The root test involves:", options:["Taking the nth root of the absolute value of terms","Taking the derivative","Integrating","Summing terms"], answer:0},
+  {question:"For the series ∑ 1/n, the series:", options:["Diverges","Converges","Is alternating","Is geometric"], answer:0},
+  {question:"A power series converges inside its:", options:["Radius of convergence","Domain","Range","Interval"], answer:0},
+  {question:"The Taylor polynomial approximates functions using:", options:["Derivatives at a point","Integrals","Limits","Slopes"], answer:0},
+  {question:"The factorial term n! appears in:", options:["Taylor series denominators","Geometric series","Harmonic series","Alternating series"], answer:0},
+  {question:"If the ratio test limit is greater than 1, the series:", options:["Diverges","Converges","Is conditionally convergent","Is alternating"], answer:0},
+  {question:"The alternating harmonic series:", options:["Converges conditionally","Diverges","Converges absolutely","Oscillates without limit"], answer:0},
+  {question:"The sum of the series ∑ (-1)^{n} / n is:", options:["ln(2)","1","0","-1"], answer:0},
+  {question:"The nth partial sum is:", options:["Sum of first n terms","Limit of series","Derivative","Integral"], answer:0},
+  {question:"If a power series converges at x = R, it:", options:["Converges absolutely for |x| < R","Diverges for |x| < R","Always converges for all x","Never converges"], answer:0},
+  {question:"The function e^x can be represented by:", options:["Its Maclaurin series","A geometric series","A harmonic series","A finite polynomial"], answer:0},
+  {question:"The series ∑ 1/n²:", options:["Converges","Diverges","Oscillates","Is geometric"], answer:0},
+  {question:"The sum of the series ∑ x^n / n! equals:", options:["e^x","ln(x)","1/(1-x)","sin(x)"], answer:0},
+  {question:"The radius of convergence is always:", options:["Non-negative","Negative","Infinite","Zero"], answer:0},
+  {question:"The alternating series test requires terms to be:", options:["Monotonically decreasing","Increasing","Constant","Oscillating"], answer:0},
+  {question:"A geometric series with |r|>1:", options:["Diverges","Converges","Oscillates","Conditionally converges"], answer:0},
+  {question:"The binomial series generalizes:", options:["(1 + x)^k","e^x","sin x","ln x"], answer:0},
+  {question:"The harmonic series diverges because:", options:["Terms decrease too slowly","Terms do not decrease","Terms increase","Terms oscillate"], answer:0},
+  {question:"Taylor series converge to the function:", options:["Within the radius of convergence","Only at the center point","Everywhere","Never"], answer:0},
+  {question:"A series is absolutely convergent if:", options:["The series of absolute values converges","The series alternates","The series diverges","The terms are all positive"], answer:0},
+  {question:"The ratio test limit equals 1 is:", options:["Inconclusive","Convergent","Divergent","Oscillatory"], answer:0},
+  {question:"The radius of convergence for the geometric series ∑ x^n is:", options:["1","0","∞","Depends on n"], answer:0},
+  {question:"Which series represents sin x?", options:["∑ (-1)^n x^{2n+1} / (2n+1)!","∑ x^n / n!","∑ x^n","∑ (-1)^n x^n"], answer:0},
+  {question:"The integral test requires:", options:["A positive, continuous, decreasing function","Any function","Only increasing functions","Only discrete values"], answer:0},
+  {question:"The error in Taylor polynomial approximation is given by:", options:["Remainder term","Integral","Derivative","Limit"], answer:0},
+  {question:"To find the interval of convergence:", options:["Test endpoints after finding radius","Only find radius","Use derivatives","Use slope fields"], answer:0},
+  {question:"The limit comparison test compares series to:", options:["Known benchmark series","Random series","Geometric series only","Power series only"], answer:0},
+  {question:"The root test and ratio test can both determine:", options:["Absolute convergence","Only conditional convergence","Divergence","Alternating behavior"], answer:0},
+  {question:"A series that converges conditionally but not absolutely:", options:["May change sum if terms rearranged","Has a finite sum","Diverges","Is geometric"], answer:0},
+  {question:"If a series converges absolutely, then it:", options:["Converges","Diverges","Oscillates","Is periodic"], answer:0}
+];
+
+const shortAnswerData = [
+  {
+    question: "Define what it means for a series to converge absolutely.",
+    sampleAnswer: "A series converges absolutely if the series of absolute values of its terms converges."
+  },
+  {
+    question: "Explain the difference between the ratio test and root test.",
+    sampleAnswer: "The ratio test uses the limit of the ratio of successive terms; the root test uses the limit of the nth root of the nth term."
+  },
+  {
+    question: "What is the radius of convergence of a power series?",
+    sampleAnswer: "It is the distance from the center within which the power series converges."
+  },
+  {
+    question: "Describe the alternating series test.",
+    sampleAnswer: "If the terms decrease monotonically to zero, the alternating series converges."
+  },
+  {
+    question: "How does the integral test help determine convergence?",
+    sampleAnswer: "By comparing the series to an improper integral of a related function."
+  }
+];
+
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+let timerInterval;
+let secondsElapsed = 0;
+function formatTime(s) {
+const m = Math.floor(s / 60).toString().padStart(2, '0');
+const sec = (s % 60).toString().padStart(2, '0');
+return m + ':' + sec;
+}
+function startTimer() {
+secondsElapsed = 0;
+timerSpan.textContent = '00:00';
+timerInterval = setInterval(() => {
+secondsElapsed++;
+timerSpan.textContent = formatTime(secondsElapsed);
+}, 1000);
+}
+function stopTimer() {
+clearInterval(timerInterval);
+}
+function loadQuiz() {
+let html = '';
+quizData.forEach((q, idx) => {
+html += <div class="question"> <p><strong>Q${idx + 1}.</strong> ${q.question}</p>;
+q.options.forEach((opt, i) => {
+html += <label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>;
+});
+html += </div>;
+});
+quizForm.innerHTML = html;
+}
+startQuizBtn.onclick = () => {
+loadQuiz();
+startQuizBtn.style.display = 'none';
+submitQuizBtn.style.display = 'inline-block';
+startTimer();
+};
+submitQuizBtn.onclick = () => {
+stopTimer();
+let score = 0;
+quizData.forEach((q, idx) => {
+const val = quizForm['q' + idx]?.value;
+if (parseInt(val) === q.answer) score++;
+});
+alert(You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.);
+let stats = JSON.parse(localStorage.getItem('unit8_stats') || '{"attempts":0,"totalScore":0}');
+stats.attempts++;
+stats.totalScore += score;
+localStorage.setItem('unit8_stats', JSON.stringify(stats));
+updateStats();
+submitQuizBtn.style.display = 'none';
+startQuizBtn.style.display = 'inline-block';
+quizForm.innerHTML = '';
+timerSpan.textContent = '00:00';
+};
+function updateStats() {
+let stats = JSON.parse(localStorage.getItem('unit8_stats'));
+if (!stats) {
+statsContent.textContent = "You haven't taken any quizzes yet.";
+return;
+}
+let avg = (stats.totalScore / stats.attempts).toFixed(2);
+statsContent.innerHTML = <p>Total Attempts: ${stats.attempts}</p> <p>Average Score: ${avg} / ${quizData.length}</p>;
+}
+updateStats();
+function loadShortAnswers() {
+let html = '';
+shortAnswerData.forEach((item, idx) => {
+html += <div class="question"> <p><strong>Q${idx + 1}.</strong> ${item.question}</p> <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea> <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div> </div>;
+});
+shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+submitShortAnswerBtn.onclick = () => {
+shortAnswerData.forEach((item, idx) => {
+document.getElementById('sample' + idx).style.display = 'block';
+});
+shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+</body> </html>
