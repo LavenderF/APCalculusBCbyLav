@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 2: Differentiation</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #f9fbfd;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2 {
+    color: #1a73e8;
+  }
+  nav a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0b52d0;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    margin-top: 5px;
+    padding: 6px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 2: Differentiation: Definition and Fundamental Properties</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Definition of the derivative as a limit.</li>
+    <li>Interpretation of the derivative as instantaneous rate of change and slope of tangent line.</li>
+    <li>Basic derivative rules: power, constant, sum, difference.</li>
+    <li>Higher order derivatives.</li>
+    <li>Using differentiation to analyze functions.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+// Quiz questions and answers for Unit 2
+const quizData = [
+  {question:"What is the definition of the derivative of f at x?", options:["f(x+h) - f(x)","lim(h→0) [f(x+h) - f(x)]/h","f'(x) * h","f(x)/h"], answer:1},
+  {question:"The derivative of a constant function is:", options:["Zero","One","The function itself","Undefined"], answer:0},
+  {question:"What does the derivative represent?", options:["Slope of tangent line","Area under curve","Function value","Integral value"], answer:0},
+  {question:"Derivative of x^3 is:", options:["3x^2","x^2","3x","x^3"], answer:0},
+  {question:"The power rule states:", options:["d/dx[x^n] = nx^(n-1)","d/dx[x^n] = n*x^n","d/dx[x^n] = n^x","d/dx[x^n] = x^n"], answer:0},
+  {question:"Derivative of 7 is:", options:["0","7","1","Does not exist"], answer:0},
+  {question:"The derivative of (f + g)(x) is:", options:["f'(x) + g'(x)","f(x) + g(x)","f'(x) * g'(x)","f(x) * g(x)"], answer:0},
+  {question:"The derivative of sin(x) is:", options:["cos(x)","sin(x)","-cos(x)","-sin(x)"], answer:0},
+  {question:"The derivative of e^x is:", options:["e^x","x e^(x-1)","1","0"], answer:0},
+  {question:"The second derivative is:", options:["Derivative of the derivative","Integral of the function","Slope of the function","Function itself"], answer:0},
+  {question:"Derivative of 1/x is:", options:["-1/x²","1/x²","1/x","-1/x"], answer:0},
+  {question:"Derivative of ln(x) is:", options:["1/x","ln(x)","x","e^x"], answer:0},
+  {question:"Which of these is the correct derivative of x^4?", options:["4x^3","x^3","x^4","3x^4"], answer:0},
+  {question:"The instantaneous rate of change of a function at a point is given by:", options:["Derivative at that point","Average value","Integral","Slope of secant"], answer:0},
+  {question:"If f(x) = 5x^2, then f'(x) = ?", options:["10x","5x","x^2","25x"], answer:0},
+  {question:"The derivative of a product of functions follows which rule?", options:["Product rule","Quotient rule","Chain rule","Power rule"], answer:0},
+  {question:"The derivative of a constant times a function is:", options:["Constant times derivative","Derivative of constant","Zero","Undefined"], answer:0},
+  {question:"Derivative of cos(x) is:", options:["-sin(x)","sin(x)","cos(x)","-cos(x)"], answer:0},
+  {question:"Chain rule is used when differentiating:", options:["Composite functions","Sum of functions","Constant functions","Polynomials only"], answer:0},
+  {question:"Derivative of tan(x) is:", options:["sec²(x)","tan²(x)","sec(x)","cos²(x)"], answer:0},
+  {question:"Derivative of x^n (n is a real number) is:", options:["nx^(n-1)","x^n","nx^n","(n-1)x^n"], answer:0},
+  {question:"Derivative of sqrt(x) is:", options:["1/(2√x)","√x","1/√x","2√x"], answer:0},
+  {question:"Derivative of e^(2x) is:", options:["2e^(2x)","e^(2x)","2xe^(2x)","e^x"], answer:0},
+  {question:"What is the derivative of ln(3x)?", options:["1/x","3/x","1/(3x)","ln(x)"], answer:0},
+  {question:"If f(x) = x^2 + 3x + 1, then f'(x) is:", options:["2x + 3","x^2 + 3","2x + 1","3x + 1"], answer:0},
+  {question:"The derivative of a sum is:", options:["Sum of derivatives","Product of derivatives","Derivative of first","Derivative of second"], answer:0},
+  {question:"Derivative of constant * function is:", options:["Constant * derivative","Derivative of constant","Zero","Undefined"], answer:0},
+  {question:"The slope of the tangent line to y = x^3 at x=2 is:", options:["12","8","6","4"], answer:0},
+  {question:"If f'(x) = 0, the function is:", options:["Constant","Increasing","Decreasing","Undefined"], answer:0},
+  {question:"Derivative of arcsin(x) is:", options:["1/√(1-x²)","-1/√(1-x²)","1/x","x²"], answer:0},
+  {question:"Derivative of arctan(x) is:", options:["1/(1+x²)","-1/(1+x²)","1/x","x²"], answer:0},
+  {question:"The power rule cannot be applied to:", options:["Functions with variable exponents","Polynomials","Constants","Power functions"], answer:0},
+  {question:"What is the derivative of 1?", options:["0","1","Undefined","Constant"], answer:0},
+  {question:"Derivative of e^(x²) is:", options:["2x e^(x²)","e^(x²)","x e^(x²)","x² e^(x²)"], answer:0},
+  {question:"Derivative of ln(x^2) is:", options:["2/x","ln(x)","1/x","x"], answer:0},
+  {question:"Derivative of constant function f(x) = 7x^0 is:", options:["0","7","1","7x"], answer:0},
+  {question:"Derivative of csc(x) is:", options:["-csc(x) cot(x)","csc(x) cot(x)","sec(x) tan(x)","-sec(x) tan(x)"], answer:0},
+  {question:"Derivative of sec(x) is:", options:["sec(x) tan(x)","-sec(x) tan(x)","csc(x) cot(x)","-csc(x) cot(x)"], answer:0}
+];
+
+// Short answer questions with sample answers for Unit 2
+const shortAnswerData = [
+  {
+    question: "Define the derivative of a function at a point.",
+    sampleAnswer: "The derivative at a point is the limit of the average rate of change of the function as the interval approaches zero; mathematically, f'(x) = lim(h→0) [f(x+h) - f(x)] / h."
+  },
+  {
+    question: "Explain the power rule for differentiation.",
+    sampleAnswer: "The power rule states that the derivative of x^n is n times x raised to the power of (n-1), i.e., d/dx[x^n] = n*x^(n-1)."
+  },
+  {
+    question: "What does the second derivative represent?",
+    sampleAnswer: "The second derivative represents the rate of change of the first derivative, often indicating concavity or acceleration."
+  },
+  {
+    question: "State the derivative of the sum of two functions.",
+    sampleAnswer: "The derivative of a sum is the sum of the derivatives: (f+g)' = f' + g'."
+  },
+  {
+    question: "When is the chain rule used?",
+    sampleAnswer: "The chain rule is used to differentiate composite functions, i.e., when one function is inside another."
+  }
+];
+
+// The rest of the JS is almost same as Unit 1, just adjust localStorage key
+
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+
+let timerInterval;
+let secondsElapsed = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  secondsElapsed = 0;
+  timerSpan.textContent = '00:00';
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    timerSpan.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function loadQuiz() {
+  let html = '';
+  quizData.forEach((q, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx+1}.</strong> ${q.question}</p>`;
+    q.options.forEach((opt,i) => {
+      html += `<label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>`;
+    });
+    html += `</div>`;
+  });
+  quizForm.innerHTML = html;
+}
+
+startQuizBtn.onclick = () => {
+  loadQuiz();
+  startQuizBtn.style.display = 'none';
+  submitQuizBtn.style.display = 'inline-block';
+  startTimer();
+};
+
+submitQuizBtn.onclick = () => {
+  stopTimer();
+  let score = 0;
+  quizData.forEach((q, idx) => {
+    const val = quizForm['q'+idx].value;
+    if (parseInt(val) === q.answer) score++;
+  });
+  alert(`You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.`);
+
+  // Save stats in localStorage
+  let stats = JSON.parse(localStorage.getItem('unit2_stats') || '{"attempts":0,"totalScore":0}');
+  stats.attempts++;
+  stats.totalScore += score;
+  localStorage.setItem('unit2_stats', JSON.stringify(stats));
+  updateStats();
+
+  submitQuizBtn.style.display = 'none';
+  startQuizBtn.style.display = 'inline-block';
+  quizForm.innerHTML = '';
+  timerSpan.textContent = '00:00';
+};
+
+function updateStats() {
+  let stats = JSON.parse(localStorage.getItem('unit2_stats'));
+  if (!stats) {
+    statsContent.textContent = "You haven't taken any quizzes yet.";
+    return;
+  }
+  let avg = (stats.totalScore / stats.attempts).toFixed(2);
+  statsContent.innerHTML = `<p>Total Attempts: ${stats.attempts}</p>
+    <p>Average Score: ${avg} / ${quizData.length}</p>`;
+}
+updateStats();
+
+function loadShortAnswers() {
+  let html = '';
+  shortAnswerData.forEach((item, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx+1}.</strong> ${item.question}</p>
+      <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea>
+      <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div>
+    </div>`;
+  });
+  shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+
+submitShortAnswerBtn.onclick = () => {
+  shortAnswerData.forEach((item, idx) => {
+    document.getElementById('sample'+idx).style.display = 'block';
+  });
+  shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+
+</body>
+</html>
