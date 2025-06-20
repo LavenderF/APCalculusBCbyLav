@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AP Calculus BC - Unit 1: Limits and Continuity</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: auto;
+    background: #f9fbfd;
+    padding: 20px;
+    color: #333;
+  }
+  h1, h2 {
+    color: #1a73e8;
+  }
+  nav a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 15px;
+  }
+  nav a:hover {
+    text-decoration: underline;
+  }
+  .section {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  .question {
+    margin: 10px 0;
+  }
+  label {
+    cursor: pointer;
+  }
+  button {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0b52d0;
+  }
+  .timer {
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    margin-top: 5px;
+    padding: 6px;
+    font-size: 14px;
+  }
+  .answer-sample {
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-style: italic;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">&larr; Home</a>
+</nav>
+
+<h1>Unit 1: Limits and Continuity</h1>
+
+<div class="section" id="content">
+  <h2>Key Concepts</h2>
+  <ul>
+    <li>Understanding limits and behavior of functions near points.</li>
+    <li>Limit laws and properties.</li>
+    <li>One-sided limits and limits at infinity.</li>
+    <li>Continuity and types of discontinuities.</li>
+    <li>Evaluating limits analytically and graphically.</li>
+  </ul>
+</div>
+
+<div class="section" id="quiz-section">
+  <h2>Multiple Choice Quiz (40 Questions)</h2>
+  <div class="timer">Timer: <span id="timer">00:00</span></div>
+  <button id="start-quiz-btn">Start Quiz</button>
+  <form id="quiz-form" style="margin-top: 20px;"></form>
+  <button id="submit-quiz-btn" style="display:none; margin-top:15px;">Submit Answers</button>
+</div>
+
+<div class="section" id="short-answer-section">
+  <h2>Short Answer Questions (5 Questions)</h2>
+  <form id="short-answer-form"></form>
+  <button id="submit-short-answer-btn" style="margin-top:15px;">Submit Short Answers</button>
+  <div id="short-answer-feedback" style="margin-top:20px;"></div>
+</div>
+
+<div class="section" id="stats-section">
+  <h2>Quiz Statistics</h2>
+  <div id="stats-content">You haven't taken any quizzes yet.</div>
+</div>
+
+<script>
+// Quiz questions and answers
+const quizData = [
+  {question:"Evaluate: lim(x→2) (x² - 4)/(x - 2)", options:["2","4","0","Does not exist"], answer:1},
+  {question:"lim(x→0) sin(x)/x = ?", options:["0","1","Does not exist","∞"], answer:1},
+  {question:"If lim(x→a) f(x) = L, what does L represent?", options:["Function value at a","Limit value as x approaches a","Derivative at a","Integral at a"], answer:1},
+  {question:"A function is continuous at x = c if:", options:["lim(x→c) f(x) exists and equals f(c)","f(c) is undefined","Derivative at c exists","f(x) is increasing at c"], answer:0},
+  {question:"What is lim(x→∞) 1/x?", options:["∞","0","1","Does not exist"], answer:1},
+  {question:"Which type of discontinuity can be 'removed' by redefining the function?", options:["Jump","Infinite","Removable","Oscillating"], answer:2},
+  {question:"lim(x→3^-) f(x) = 4, lim(x→3^+) f(x) = 5. What is lim(x→3) f(x)?", options:["4","5","Does not exist","9"], answer:2},
+  {question:"The Squeeze Theorem is used to find limits when:", options:["Function is bounded by two functions with same limit","Function is discontinuous","Derivative does not exist","Integral is improper"], answer:0},
+  {question:"lim(x→0) (1 - cos x)/x² = ?", options:["0","1/2","1","Does not exist"], answer:1},
+  {question:"A function continuous on [a,b] must be:", options:["Differentiable","Integrable","Constant","Discontinuous"], answer:1},
+  {question:"lim(x→1) (x³ -1)/(x-1) = ?", options:["3","0","1","Does not exist"], answer:0},
+  {question:"If f(x) = 1/x, what is lim(x→0⁺) f(x)?", options:["∞","-∞","0","Does not exist"], answer:0},
+  {question:"If lim(x→c) f(x) ≠ f(c), the function has:", options:["Continuous point","Removable discontinuity","Jump discontinuity","Infinite discontinuity"], answer:1},
+  {question:"If lim(x→a) f(x) = ∞, we say the limit:", options:["Exists","Is infinite","Does not exist","Is zero"], answer:1},
+  {question:"If f is continuous and g is continuous, then f+g is:", options:["Continuous","Discontinuous","Constant","Undefined"], answer:0},
+  {question:"If f(x) = sqrt(x), is f continuous at x=0?", options:["Yes","No","Only from right","Only from left"], answer:0},
+  {question:"lim(x→0) (sin 3x)/x = ?", options:["0","3","1","Does not exist"], answer:1},
+  {question:"lim(x→∞) (3x² + 1)/(2x² - 5) = ?", options:["3/2","0","∞","Does not exist"], answer:0},
+  {question:"If a function is not defined at x = c but lim(x→c) exists, what type of discontinuity is it?", options:["Removable","Jump","Infinite","None"], answer:0},
+  {question:"The limit lim(x→∞) (1 + 1/x)^x equals:", options:["e","1","∞","0"], answer:0},
+  {question:"Which theorem guarantees the existence of a limit for continuous functions?", options:["Intermediate Value Theorem","Mean Value Theorem","Rolle's Theorem","Fundamental Theorem of Calculus"], answer:0},
+  {question:"What is lim(x→0) (e^x -1)/x?", options:["0","1","Does not exist","∞"], answer:1},
+  {question:"If lim(x→a) f(x) = L and lim(x→a) g(x) = M, what is lim(x→a) (f(x)+g(x))?", options:["L+M","LM","L/M","Cannot determine"], answer:0},
+  {question:"If a function has a jump discontinuity, it means:", options:["Limits from left and right differ","Function is continuous","Derivative exists","Integral is zero"], answer:0},
+  {question:"Which of these functions is continuous everywhere?", options:["x²","1/x","sqrt(x) for x≥0","1/(x-1)"], answer:0},
+  {question:"lim(x→0) (1 + x)^{1/x} =", options:["e","1","0","∞"], answer:0},
+  {question:"lim(x→∞) arctan(x) =", options:["π/2","0","∞","-∞"], answer:0},
+  {question:"If lim(x→a) f(x) = L but f(a) is not defined, the discontinuity is:", options:["Removable","Jump","Infinite","None"], answer:0},
+  {question:"If f(x) is continuous on [a,b], then it is:", options:["Bounded","Unbounded","Always differentiable","Not integrable"], answer:0},
+  {question:"The limit lim(x→0) (tan x)/x =", options:["1","0","∞","Does not exist"], answer:0},
+  {question:"The function f(x) = 1/x is continuous on:", options:["(-∞,0) and (0,∞)","All real numbers","(0,∞) only","(-∞,0) only"], answer:0},
+  {question:"Which limit represents a vertical asymptote?", options:["lim(x→c) f(x) = ±∞","lim(x→c) f(x) = L","lim(x→∞) f(x) = 0","lim(x→0) f(x) = 1"], answer:0},
+  {question:"lim(x→2) (x² - 5x + 6)/(x-2) = ?", options:["-1","0","1","Does not exist"], answer:0},
+  {question:"If f is continuous and positive on [a,b], then ∫_a^b f(x) dx:", options:["Is positive","Is zero","Is negative","Does not exist"], answer:0},
+  {question:"lim(x→0) (1 - cos x)/x² =", options:["1/2","0","1","∞"], answer:0},
+  {question:"If lim(x→a) f(x) exists but is different from f(a), this is a:", options:["Removable discontinuity","Jump","Infinite discontinuity","None"], answer:0},
+  {question:"A function with an infinite discontinuity has:", options:["Vertical asymptote","Hole","Jump","Continuous"], answer:0},
+  {question:"lim(x→∞) (5x³ - x)/(2x³ + 3) =", options:["5/2","0","∞","Does not exist"], answer:0}
+];
+
+// Short answer questions with sample answers
+const shortAnswerData = [
+  {
+    question: "Explain what it means for a function to be continuous at a point.",
+    sampleAnswer: "A function is continuous at a point c if the limit as x approaches c of f(x) equals f(c), meaning no jumps, holes, or breaks at c."
+  },
+  {
+    question: "Describe the difference between one-sided limits and two-sided limits.",
+    sampleAnswer: "One-sided limits consider approaching from only one direction (left or right), while two-sided limits consider approaching from both sides."
+  },
+  {
+    question: "What is the Squeeze Theorem and when is it used?",
+    sampleAnswer: "The Squeeze Theorem states that if a function is 'squeezed' between two functions that have the same limit at a point, then it also approaches that limit. It’s used when direct evaluation is difficult."
+  },
+  {
+    question: "How do you identify a removable discontinuity?",
+    sampleAnswer: "A removable discontinuity occurs if the limit exists at a point, but the function is either not defined or defined differently there, so redefining the function at that point removes the discontinuity."
+  },
+  {
+    question: "What does it mean if a limit at infinity equals a finite number?",
+    sampleAnswer: "It means the function approaches a horizontal asymptote at that finite number as x grows very large or very small."
+  }
+];
+
+// Timer and quiz logic
+const startQuizBtn = document.getElementById('start-quiz-btn');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const quizForm = document.getElementById('quiz-form');
+const timerSpan = document.getElementById('timer');
+const statsContent = document.getElementById('stats-content');
+const shortAnswerForm = document.getElementById('short-answer-form');
+const submitShortAnswerBtn = document.getElementById('submit-short-answer-btn');
+const shortAnswerFeedback = document.getElementById('short-answer-feedback');
+
+let timerInterval;
+let secondsElapsed = 0;
+
+function formatTime(s) {
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return m + ':' + sec;
+}
+
+function startTimer() {
+  secondsElapsed = 0;
+  timerSpan.textContent = '00:00';
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    timerSpan.textContent = formatTime(secondsElapsed);
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+}
+
+function loadQuiz() {
+  let html = '';
+  quizData.forEach((q, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx+1}.</strong> ${q.question}</p>`;
+    q.options.forEach((opt,i) => {
+      html += `<label><input type="radio" name="q${idx}" value="${i}"> ${opt}</label><br>`;
+    });
+    html += `</div>`;
+  });
+  quizForm.innerHTML = html;
+}
+
+startQuizBtn.onclick = () => {
+  loadQuiz();
+  startQuizBtn.style.display = 'none';
+  submitQuizBtn.style.display = 'inline-block';
+  startTimer();
+};
+
+submitQuizBtn.onclick = () => {
+  stopTimer();
+  let score = 0;
+  quizData.forEach((q, idx) => {
+    const val = quizForm['q'+idx].value;
+    if (parseInt(val) === q.answer) score++;
+  });
+  alert(`You scored ${score} out of ${quizData.length} in ${formatTime(secondsElapsed)}.`);
+
+  // Save stats in localStorage
+  let stats = JSON.parse(localStorage.getItem('unit1_stats') || '{"attempts":0,"totalScore":0}');
+  stats.attempts++;
+  stats.totalScore += score;
+  localStorage.setItem('unit1_stats', JSON.stringify(stats));
+  updateStats();
+
+  submitQuizBtn.style.display = 'none';
+  startQuizBtn.style.display = 'inline-block';
+  quizForm.innerHTML = '';
+  timerSpan.textContent = '00:00';
+};
+
+function updateStats() {
+  let stats = JSON.parse(localStorage.getItem('unit1_stats'));
+  if (!stats) {
+    statsContent.textContent = "You haven't taken any quizzes yet.";
+    return;
+  }
+  let avg = (stats.totalScore / stats.attempts).toFixed(2);
+  statsContent.innerHTML = `<p>Total Attempts: ${stats.attempts}</p>
+    <p>Average Score: ${avg} / ${quizData.length}</p>`;
+}
+updateStats();
+
+function loadShortAnswers() {
+  let html = '';
+  shortAnswerData.forEach((item, idx) => {
+    html += `<div class="question">
+      <p><strong>Q${idx+1}.</strong> ${item.question}</p>
+      <textarea name="sa${idx}" placeholder="Write your answer here..."></textarea>
+      <div class="answer-sample" id="sample${idx}" style="display:none;">Sample answer: ${item.sampleAnswer}</div>
+    </div>`;
+  });
+  shortAnswerForm.innerHTML = html;
+}
+loadShortAnswers();
+
+submitShortAnswerBtn.onclick = () => {
+  shortAnswerData.forEach((item, idx) => {
+    document.getElementById('sample'+idx).style.display = 'block';
+  });
+  shortAnswerFeedback.textContent = 'Sample answers are shown above for your reference.';
+};
+</script>
+
+</body>
+</html>
